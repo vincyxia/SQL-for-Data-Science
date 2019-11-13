@@ -1,0 +1,560 @@
+Data Scientist Role Play: Profiling and Analyzing the Yelp Dataset Coursera Worksheet
+
+This is a 2-part assignment. In the first part, you are asked a series of questions that will help you profile and understand the data just like a data scientist would. For this first part of the assignment, you will be assessed both on the correctness of your findings, as well as the code you used to arrive at your answer. You will be graded on how easy your code is to read, so remember to use proper formatting and comments where necessary.
+
+In the second part of the assignment, you are asked to come up with your own inferences and analysis of the data for a particular research question you want to answer. You will be required to prepare the dataset for the analysis you choose to do. As with the first part, you will be graded, in part, on how easy your code is to read, so use proper formatting and comments to illustrate and communicate your intent as required.
+
+For both parts of this assignment, use this "worksheet." It provides all the questions you are being asked, and your job will be to transfer your answers and SQL coding where indicated into this worksheet so that your peers can review your work. You should be able to use any Text Editor (Windows Notepad, Apple TextEdit, Notepad ++, Sublime Text, etc.) to copy and paste your answers. If you are going to use Word or some other page layout application, just be careful to make sure your answers and code are lined appropriately.
+In this case, you may want to save as a PDF to ensure your formatting remains intact for you reviewer.
+
+
+
+Part 1: Yelp Dataset Profiling and Understanding
+
+1. Profile the data by finding the total number of records for each of the tables below:
+	
+i. Attribute table = 10000
+ii. Business table = 10000
+iii. Category table = 10000
+iv. Checkin table = 10000
+v. elite_years table = 10000
+vi. friend table = 10000 
+vii. hours table = 10000
+viii. photo table = 10000 
+ix. review table = 10000 
+x. tip table = 10000 
+xi. user table = 10000
+	
+
+
+2. Find the total distinct records by either the foreign key or primary key for each table. If two foreign keys are listed in the table, please specify which foreign key.
+
+i. Business = 10000 (id)
+ii. Hours = 1562 (business_id)
+iii. Category = 2643 (business_id)
+iv. Attribute = 1115 (business_id)
+v. Review = 10000 (id)
+vi. Checkin = 493 (business_id)
+vii. Photo = 10000 (id)
+viii. Tip = 537 (user_id)
+ix. User = 10000 (id)
+x. Friend = 11 (user_id)
+xi. Elite_years = 2780 (user_id)
+
+Note: Primary Keys are denoted in the ER-Diagram with a yellow key icon.	
+
+
+
+3. Are there any columns with null values in the Users table? Indicate "yes," or "no."
+
+	Answer: no
+	
+	
+	SQL code used to arrive at answer:
+	
+SELECT 
+  COUNT(*) AS null_rows_cnt
+FROM user
+WHERE
+  id IS NULL
+  OR name IS NULL
+  OR review_count IS NULL
+  OR yelping_since IS NULL
+  OR useful IS NULL
+  OR funny IS NULL
+  OR cool IS NULL
+  OR fans IS NULL
+  OR average_stars IS NULL
+  OR compliment_hot IS NULL
+  OR compliment_more IS NULL
+  OR compliment_profile IS NULL
+  OR compliment_cute IS NULL
+  OR compliment_list IS NULL
+  OR compliment_note IS NULL
+  OR compliment_plain IS NULL
+  OR compliment_cool IS NULL
+  OR compliment_funny IS NULL
+  OR compliment_writer IS NULL
+  OR compliment_photos IS NULL
+	
+
+	
+4. For each table and column listed below, display the smallest (minimum), largest (maximum), and average (mean) value for the following fields:
+
+	i. Table: Review, Column: Stars
+	
+		min:	1	max:	5	avg: 3.7082
+		
+	
+	ii. Table: Business, Column: Stars
+	
+		min:	1	max:	5	avg: 3.6549
+		
+	
+	iii. Table: Tip, Column: Likes
+	
+		min:	0	max:	2	avg: 0.0144
+		
+	
+	iv. Table: Checkin, Column: Count
+	
+		min:	1	max:	53	avg: 1.9414
+		
+	
+	v. Table: User, Column: Review_count
+	
+		min:	0	max:	2000	avg: 24.2995
+		
+
+
+5. List the cities with the most reviews in descending order:
+
+	SQL code used to arrive at answer:
+
+SELECT SUM(review_count) AS review_num,
+city
+FROM business
+GROUP BY city
+ORDER BY review_num DESC
+	
+	
+	Copy and Paste the Result Below:
+
++------------+-----------------+
+| review_num | city            |
++------------+-----------------+
+|      82854 | Las Vegas       |
+|      34503 | Phoenix         |
+|      24113 | Toronto         |
+|      20614 | Scottsdale      |
+|      12523 | Charlotte       |
+|      10871 | Henderson       |
+|      10504 | Tempe           |
+|       9798 | Pittsburgh      |
+|       9448 | Montréal        |
+|       8112 | Chandler        |
+|       6875 | Mesa            |
+|       6380 | Gilbert         |
+|       5593 | Cleveland       |
+|       5265 | Madison         |
+|       4406 | Glendale        |
+|       3814 | Mississauga     |
+|       2792 | Edinburgh       |
+|       2624 | Peoria          |
+|       2438 | North Las Vegas |
+|       2352 | Markham         |
+|       2029 | Champaign       |
+|       1849 | Stuttgart       |
+|       1520 | Surprise        |
+|       1465 | Lakewood        |
+|       1155 | Goodyear        |
++------------+-----------------+
+(Output limit exceeded, 25 of 362 total rows shown)
+	
+
+6. Find the distribution of star ratings to the business in the following cities:
+
+i. Avon
+
+SQL code used to arrive at answer:
+
+SELECT 
+  stars, COUNT(*) AS business_count
+FROM business
+WHERE city = 'Avon'
+GROUP BY stars
+ORDER BY stars
+
+Copy and Paste the Resulting Table Below (2 columns – star rating and count):
+
++-------+----------------+
+| stars | business_count |
++-------+----------------+
+|   1.5 |              1 |
+|   2.5 |              2 |
+|   3.5 |              3 |
+|   4.0 |              2 |
+|   4.5 |              1 |
+|   5.0 |              1 |
++-------+----------------+
+
+ii. Beachwood
+
+SQL code used to arrive at answer:
+
+SELECT 
+  stars, COUNT(*) AS business_count
+FROM business
+WHERE city = 'Beachwood'
+GROUP BY stars
+ORDER BY stars
+
+Copy and Paste the Resulting Table Below (2 columns – star rating and count):
+		
++-------+----------------+
+| stars | business_count |
++-------+----------------+
+|   2.0 |              1 |
+|   2.5 |              1 |
+|   3.0 |              2 |
+|   3.5 |              2 |
+|   4.0 |              1 |
+|   4.5 |              2 |
+|   5.0 |              5 |
++-------+----------------+
+
+
+7. Find the top 3 users based on their total number of reviews:
+		
+	SQL code used to arrive at answer:
+
+-- no need to use GROUP BY
+SELECT 
+  id, review_count
+FROM user
+ORDER BY review_count DESC
+LIMIT 3;
+		
+	Copy and Paste the Result Below:
+
++------------------------+--------------+		
+| id                     | review_count |
++------------------------+--------------+
+| -G7Zkl1wIWBBmD0KRy_sCw |         2000 |
+| -3s52C4zL_DHRK0ULG6qtg |         1629 |
+| -8lbUNlXVSoXqaRRiHiSNg |         1339 |
++------------------------+--------------+	
+
+
+8. Does posing more reviews correlate with more fans?
+
+	Please explain your findings and interpretation of the results:
+
+There is no correlation between reviews and fans.
+	
+SELECT id, name, review_count, fans
+FROM user
+
++------------------------+-----------+--------------+------+
+| id                     | name      | review_count | fans | 
++------------------------+-----------+--------------+------+
+| -G7Zkl1wIWBBmD0KRy_sCw | Gerald    |         2000 |  253 |    
+| -3s52C4zL_DHRK0ULG6qtg | Sara      |         1629 |   50 |   
+| -8lbUNlXVSoXqaRRiHiSNg | Yuri      |         1339 |   76 |   
+| -K2Tcgh2EKX6e6HqqIrBIQ | .Hon      |         1246 |  101 |   
+| -FZBTkAZEXoP7CYvRV2ZwQ | William   |         1215 |  126 |    
+| --2vR0DIsmQ6WfcSzKWigw | Harald    |         1153 |  311 |    
+| -gokwePdbXjfS0iF7NsUGA | eric      |         1116 |   16 |   
+| -DFCC64NXgqrxlO8aLU5rg | Roanna    |         1039 |  104 |    
+| -8EnCioUmDygAbsYZmTeRQ | Mimi      |          968 |  497 |    
+| -0IiMAZI2SsQ7VmyzJjokQ | Christine |          930 |  173 |    
+| -fUARDNuXAfrOn4WLSZLgA | Ed        |          904 |   38 |   
+| -hKniZN2OdshWLHYuj21jQ | Nicole    |          864 |   43 |   
+| -9da1xk7zgnnfO1uTVYGkA | Fran      |          862 |  124 |    
+| -B-QEUESGWHPE_889WJaeg | Mark      |          861 |  115 |    
+| -kLVfaJytOJY2-QdQoCcNQ | Christina |          842 |   85 |    
+| -kO6984fXByyZm3_6z2JYg | Dominic   |          836 |   37 |   
+| -lh59ko3dxChBSZ9U7LfUw | Lissa     |          834 |  120 |    
+| -g3XIcCb2b-BD0QBCcq2Sw | Lisa      |          813 |  159 |    
+| -l9giG8TSDBG1jnUBUXp5w | Alison    |          775 |   61 |   
+| -dw8f7FLaUmWR7bfJ_Yf0w | Sui       |          754 |   78 |  
+| -AaBjWJYiQxXkCMDlXfPGw | Tim       |          702 |   35 |  
+| -jt1ACMiZljnBFvS6RRvnA | L         |          696 |   10 |  
+| -IgKkE8JvYNWeGu8ze4P8Q | Angela    |          694 |  101 |    
+| -hxUwfo3cMnLTv-CAaP69A | Crissy    |          676 |   25 |   
+| -H6cTbVxeIRYR-atxdielQ | Lyn       |          675 |   45 |   
++------------------------+-----------+--------------+------+
+(Output limit exceeded, 25 of 10000 total rows shown)
+
+
+	
+9. Are there more reviews with the word "love" or with the word "hate" in them?
+
+	Answer:
+
++-----------------------+-----------------------+
+| reviews_with_hate_cnt | reviews_with_love_cnt |
++-----------------------+-----------------------+
+|                   232 |                  1780 |
++-----------------------+-----------------------+	
+	
+SQL code used to arrive at answer:
+
+SELECT 
+  SUM(CASE WHEN UPPER(r.text) LIKE '%HATE%' THEN 1 ELSE 0 END) AS reviews_with_hate_cnt,
+  SUM(CASE WHEN UPPER(r.text) LIKE '%LOVE%' THEN 1 ELSE 0 END) AS reviews_with_love_cnt
+FROM review r
+;
+
+
+10. Find the top 10 users with the most fans:
+
+	SQL code used to arrive at answer:
+-- no need to use GROUP BY
+SELECT id, name, fans
+FROM user
+ORDER BY fans DESC
+LIMIT 10;	
+	
+	Copy and Paste the Result Below:
++------------------------+-----------+------+
+| id                     | name      | fans |
++------------------------+-----------+------+
+| -9I98YbNQnLdAmcYfb324Q | Amy       |  503 |
+| -8EnCioUmDygAbsYZmTeRQ | Mimi      |  497 |
+| --2vR0DIsmQ6WfcSzKWigw | Harald    |  311 |
+| -G7Zkl1wIWBBmD0KRy_sCw | Gerald    |  253 |
+| -0IiMAZI2SsQ7VmyzJjokQ | Christine |  173 |
+| -g3XIcCb2b-BD0QBCcq2Sw | Lisa      |  159 |
+| -9bbDysuiWeo2VShFJJtcw | Cat       |  133 |
+| -FZBTkAZEXoP7CYvRV2ZwQ | William   |  126 |
+| -9da1xk7zgnnfO1uTVYGkA | Fran      |  124 |
+| -lh59ko3dxChBSZ9U7LfUw | Lissa     |  120 |
++------------------------+-----------+------+
+	
+	
+11. Is there a strong relationship (or correlation) between having a high number of fans and being listed as "useful" or "funny?" Out of the top 10 users with the highest number of fans, what percent are also listed as “useful” or “funny”?
+
+Key:
+0% - 25% - Low relationship
+26% - 75% - Medium relationship
+76% - 100% - Strong relationship
+	
+	SQL code used to arrive at answer:
+
+		SELECT name,
+			   fans,
+			   useful,
+			   funny,
+			   review_count
+		FROM user
+		ORDER BY fans DESC
+		LIMIT 10		
+	
+	Copy and Paste the Result Below:
+	
++-----------+------+--------+--------+--------------+
+| name      | fans | useful |  funny | review_count |
++-----------+------+--------+--------+--------------+
+| Amy       |  503 |   3226 |   2554 |          609 |
+| Mimi      |  497 |    257 |    138 |          968 |
+| Harald    |  311 | 122921 | 122419 |         1153 |
+| Gerald    |  253 |  17524 |   2324 |         2000 |
+| Christine |  173 |   4834 |   6646 |          930 |
+| Lisa      |  159 |     48 |     13 |          813 |
+| Cat       |  133 |   1062 |    672 |          377 |
+| William   |  126 |   9363 |   9361 |         1215 |
+| Fran      |  124 |   9851 |   7606 |          862 |
+| Lissa     |  120 |    455 |    150 |          834 |
++-----------+------+--------+--------+--------------+	
+
+
+	Please explain your findings and interpretation of the results:
+	
+There seems no correlation between having high number of fans and being listed as “useful” or “funny”.
+	
+
+Part 2: Inferences and Analysis
+
+
+1. Pick one city and category of your choice and group the businesses in that city or category by their overall star rating. Compare the businesses with 2-3 stars to the businesses with 4-5 stars and answer the following questions. Include your code.
+	
+i. Do the two groups you chose to analyze have a different distribution of hours?
+
+They work on largely the same days.
+
+ii. Do the two groups you chose to analyze have a different number of reviews?
+
+Yes.        
+         
+iii. Are you able to infer anything from the location data provided between these two groups? Explain.
+
+No. 
+
+SQL code used for analysis:
+
+question i
+SELECT 
+  CASE WHEN b.stars BETWEEN 2 AND 3 THEN '2-3 Stars'
+    WHEN b.stars BETWEEN 4 AND 5 THEN '4-5 Stars' END AS star_group, 
+    h.day_in_week,
+    COUNT(*) AS cnt
+FROM business b
+  INNER JOIN (
+    SELECT DISTINCT
+      business_id,
+      CASE
+				  WHEN hours LIKE "%Monday%" THEN 1
+				  WHEN hours LIKE "%Tuesday%" THEN 2
+				  WHEN hours LIKE "%Wednesday%" THEN 3
+				  WHEN hours LIKE "%Thursday%" THEN 4
+				  WHEN hours LIKE "%Friday%" THEN 5
+				  WHEN hours LIKE "%Saturday%" THEN 6
+				  WHEN hours LIKE "%Sunday%" THEN 7
+			   END AS day_in_week,
+      REPLACE(hours, RTRIM(hours, REPLACE(hours, '|', '' ) ), '') AS hours
+    FROM hours
+  ) h ON b.id = h.business_id
+WHERE 1=1
+  AND b.city = 'Toronto'
+  AND (b.stars BETWEEN 2 AND 3 OR b.stars BETWEEN 4 AND 5)
+GROUP BY 
+  CASE WHEN b.stars BETWEEN 2 AND 3 THEN '2-3 Stars'
+    WHEN b.stars BETWEEN 4 AND 5 THEN '4-5 Stars' END,
+    h.day_in_week
+ORDER BY star_group, day_in_week;
+
+question ii
+
+SELECT 
+  CASE WHEN b.stars BETWEEN 2 AND 3 THEN '2-3 Stars'
+    WHEN b.stars BETWEEN 4 AND 5 THEN '4-5 Stars' END AS star_group, 
+    COUNT(*) AS cnt,
+    SUM(review_count) AS review_count
+FROM business b
+WHERE 1=1
+  AND b.id IN (SELECT DISTINCT business_id FROM hours)
+  AND b.city = 'Toronto'
+  AND (b.stars BETWEEN 2 AND 3 OR b.stars BETWEEN 4 AND 5)
+GROUP BY 
+  CASE WHEN b.stars BETWEEN 2 AND 3 THEN '2-3 Stars'
+    WHEN b.stars BETWEEN 4 AND 5 THEN '4-5 Stars' END
+ORDER BY star_group, review_count;
+
+question iii
+
+
+		
+2. Group business based on the ones that are open and the ones that are closed. What differences can you find between the ones that are still open and the ones that are closed? List at least two differences and the SQL code you used to arrive at your answer.
+		
+i. Difference 1:
+
+Average stars these two Groups get.
+         
+         
+ii. Difference 2:
+
+Total review count these two groups have.
+                 
+SQL code used for analysis:
+
+SELECT AVG(stars),
+is_open,
+sum(review_count)
+FROM business
+GROUP BY is_open
+
+	
+3. For this last part of your analysis, you are going to choose the type of analysis you want to conduct on the Yelp dataset and are going to prepare the data for analysis.
+
+Ideas for analysis include: Parsing out keywords and business attributes for sentiment analysis, clustering businesses to find commonalities or anomalies between them, predicting the overall star rating for a business, predicting the number of fans a user will have, and so on. These are just a few examples to get you started, so feel free to be creative and come up with your own problem you want to solve. Provide answers, in-line, to all of the following:
+	
+i. Indicate the type of analysis you chose to do:
+         
+My analysis will be building a logistic regression model to predict the probability that a business can remain open.
+         
+ii. Write 1-2 brief paragraphs on the type of data you will need for your analysis and why you chose that data:
+                           
+                  
+To predict the probability of open, we need to follow below steps:
+
+1- We need to collect features of the business, for example: 
+	- open hours
+	- locations
+	- various attributes (e.g., is it dog friendly?)
+	- number of photos taken
+	- number of reviews
+	- number of reviews marked as "cool"
+
+Given more time, we can have even more refined features using NLP. For example, the dominant category of business, or the sentiment of reviews (happy, angry, and more), etc.
+
+The features that we use demonstrate geography/hours/general quality/engagement/customer feedbacks and many other aspects of business that can reflect the competency of a business.
+
+2- We need to have the actual is_open data for us to build the model.
+3- Building a model.
+4- Using the model on new data.
+
+iii. Output of your finished dataset:
+
+id                     | name                                   | neighborhood  | address                                    | city             | state | postal_code | latitude | longitude | stars | review_count | is_open | photo_cnt | category_cnt | Alcohol       | review_cnt | useful_review_cnt | funny_review_cnt | cool_review_cnt | tips_cnt | liked_tips_cnt |
++------------------------+----------------------------------------+---------------+--------------------------------------------+------------------+-------+-------------+----------+-----------+-------+--------------+---------+-----------+--------------+---------------+------------+-------------------+------------------+-----------------+----------+----------------+
+| --6MefnULPED_I942VcFNA | John's Chinese BBQ Restaurant          |               | 328 Highway 7 E, Chalmers Gate 11, Unit 10 | Richmond Hill    | ON    | L4B 3P7     |  43.8409 |  -79.3996 |   3.0 |           30 |       1 |      None |         None | not available |       None |              None |             None |            None |     None |           None |
+| --7zmmkVg-IMGaXbuVd0SQ | Primal Brewery                         |               | 16432 Old Statesville Rd                   | Huntersville     | NC    | 28078       |  35.4371 |  -80.8437 |   4.0 |           42 |       1 |      None |         None | not available |       None |              None |             None |            None |     None |           None |
+| --8LPVSo5i0Oo61X01sV9A | Valley Bone and Joint Specialists      |               | 3941 E Baseline Rd, Ste 102                | Gilbert          | AZ    | 85234       |  33.3795 |  -111.728 |   4.5 |            3 |       1 |      None |         None | not available |       None |              None |             None |            None |     None |           None |
+| --9QQLMTbFzLJ_oT-ON3Xw | Great Clips                            |               | 1835 E Guadalupe Rd, Ste 106               | Tempe            | AZ    | 85283       |  33.3617 |   -111.91 |   3.0 |            9 |       1 |      None |         None | not available |       None |              None |             None |            None |     None |           None |
+| --9e1ONYQuAa-CB_Rrw7Tw | Delmonico Steakhouse                   | The Strip     | 3355 Las Vegas Blvd S                      | Las Vegas        | NV    | 89109       |  36.1232 |  -115.169 |   4.0 |         1389 |       1 |         6 |         None | not available |          4 |                 3 |                2 |               2 |     None |           None |
+| --DaPTJW3-tB1vP-PfdTEg | Sunnyside Grill                        | Corso Italia  | 1218 Saint Clair Avenue W                  | Toronto          | ON    | M6E         |  43.6778 |  -79.4447 |   3.5 |           37 |       1 |      None |         None | not available |       None |              None |             None |            None |     None |           None |
+| --DdmeR16TRb3LsjG0ejrQ | World Food Championships               | The Strip     | 3645 Las Vegas Blvd S                      | Las Vegas        | NV    | 89109       |  36.1143 |  -115.171 |   3.0 |            5 |       1 |      None |         None | not available |       None |              None |             None |            None |     None |           None |
+| --EX4rRznJrltyn-34Jz1w | Bath & Body Works                      |               | 6801 Northlake Mall Dr, Ste 172            | Charlotte        | NC    | 28216       |  35.3521 |  -80.8512 |   4.0 |            3 |       1 |      None |         None | not available |       None |              None |             None |            None |     None |           None |
+| --FBCX-N37CMYDfs790Bnw | The Bar At Bermuda & St. Rose          | Southeast     | 11624 Bermuda Rd                           | Henderson        | NV    | 89052       |  35.9787 |  -115.155 |   4.0 |          100 |       1 |      None |         None | not available |       None |              None |             None |            None |     None |           None |
+| --FLdgM0GNpXVMn74ppCGw | Welch Physical Therapy                 |               | 3011 S Lindsay Rd, Bldg 6, Ste 114         | Gilbert          | AZ    | 85296       |  33.2955 |  -111.773 |   3.5 |            6 |       1 |      None |         None | not available |       None |              None |             None |            None |     None |           None |
+| --GM_ORV2cYS-h38DSaCLw | Mm Mm Pizza                            |               | 407 S Central Ave                          | Canonsburg       | PA    | 15317       |  40.2526 |  -80.1839 |   4.0 |            7 |       1 |      None |         None | not available |       None |              None |             None |            None |     None |           None |
+| --I7YYLada0tSLkORTHb5Q | Happy Moose Bar and Grill              |               | 9436 State Rte 14                          | Streetsboro      | OH    | 44241       |  41.2426 |  -81.3526 |   3.5 |           61 |       1 |      None |         None | not available |       None |              None |             None |            None |     None |           None |
+| --KCl2FvVQpvjzmZSPyviA | Hungry Howie's Pizza                   |               | 6426 W Sugar Creek Rd, Unit A              | Charlotte        | NC    | 28269       |  35.3335 |  -80.7962 |   3.0 |           12 |       1 |         1 |         None | not available |       None |              None |             None |            None |     None |           None |
+| --KQsXc-clkO7oHRqGzSzg | Sam's Club                             |               | 15255 N Northsight Blvd                    | Scottsdale       | AZ    | 85260       |  33.6228 |  -111.895 |   3.0 |           26 |       1 |      None |         None | not available |       None |              None |             None |            None |     None |           None |
+| --LY7PrnEegglB7vnPCjQw | International Newsagents               | Old Town      | 351 High Street, New Town                  | Edinburgh        | EDH   | EH1 1PW     |  55.9498 |  -3.19119 |   4.0 |           10 |       1 |      None |         None | not available |       None |              None |             None |            None |     None |           None |
+| --Ni3oJ4VOqfOEu7Sj2Vzg | KFC                                    |               | 1245 Pearl Road                            | Brunswick        | OH    | 44212       |  41.2419 |  -81.8411 |   2.0 |            6 |       1 |         1 |         None | not available |       None |              None |             None |            None |     None |           None |
+| --R3uiY2dB43MpdwtG6jhQ | Don Valley North Toyota Scion, Service |               | 3300 Steeles Avenue E                      | Markham          | ON    | L3R 1G9     |  43.8159 |  -79.3421 |   3.5 |           10 |       1 |      None |         None | not available |       None |              None |             None |            None |     None |           None |
+| --Rsj71PBe31h5YljVseKA | Circle K                               |               | 1850 W Happy Valley Rd                     | Phoenix          | AZ    | 85085       |  33.7135 |  -112.099 |   4.0 |            6 |       1 |      None |         None | not available |       None |              None |             None |            None |     None |           None |
+| --S62v0QgkqQaVUhFnNHrw | Denny's                                |               | 6207 Wilson Mills Rd                       | Highland Heights | OH    | 44143       |  41.5394 |  -81.4551 |   2.0 |           22 |       1 |         1 |         None | not available |       None |              None |             None |            None |     None |           None |
+| --SrzpvFLwP_YFwB_Cetow | Keung Kee Restaurant                   | Scarborough   | 3300 Midland Avenue, Unit 41               | Toronto          | ON    | M1V 0C7     |  43.8068 |  -79.2889 |   3.5 |           38 |       1 |      None |         None | not available |       None |              None |             None |            None |     None |           None |
+| --TcDRzRIxhvHM4DSgEuMA | The Greens                             |               | 2241 N Green Valley Pkwy                   | Henderson        | NV    | 89014       |  36.0548 |  -115.084 |   2.0 |            4 |       1 |      None |         None | not available |       None |              None |             None |            None |     None |           None |
+| --U98MNlDym2cLn36BBPgQ | Pronto Pizza                           |               | 7870 Idlewild Rd                           | Indian Trail     | NC    | 28079       |   35.107 |  -80.6326 |   3.0 |            4 |       1 |      None |         None | not available |       None |              None |             None |            None |     None |           None |
+| --W4kqPWwXFycuqejFANmw | SAE Institute                          |               | Stuttgarter Str. 23                        | Stuttgart        | BW    | 70469       |  48.8106 |   9.16523 |   4.5 |            3 |       1 |      None |         None | not available |       None |              None |             None |            None |     None |           None |
+| --WsruI0IGEoeRmkErU5Gg | Dial Carpet Cleaning                   | Westside      | 3111 S Valley Vw, #H-104                   | Las Vegas        | NV    | 89102       |  36.1309 |  -115.191 |   5.0 |           13 |       1 |      None |         None | not available |       None |              None |             None |            None |     None |           None |
+| --Y7NhBKzLTbNliMUX_wfg | Pinnacle Restoration                   | Spring Valley | 10075 Mystic Lake Ave                      | Las Vegas        | NV    | 89148       |  36.0704 |  -115.313 |   5.0 |            7 |       1 |      None |         None | not available |       None |              None |             None |            None |     None |           None |
+         
+iv. Provide the SQL code you used to create your final dataset:
+
+/*
+* Please note: the dataset provided are not comprehensive. It seems like tables are truncated to only have 10000 rows. 
+* As a result, if performing INNER JOIN with too many detail tables, the result would have 0 rows.
+* This is why in below LEFT OUTER JOIN is used. Ideally, INNER JOIN should be used if data are comprehensive.
+*/
+
+SELECT
+  b.*,
+  p.photo_cnt,
+  c.category_cnt,
+  CASE WHEN a.value IS NULL THEN 'not available'
+    ELSE a.value END AS Alcohol,
+  r.review_cnt,
+  r.useful_review_cnt,
+  r.funny_review_cnt,
+  r.cool_review_cnt,
+  t.tips_cnt,
+  t.liked_tips_cnt
+
+FROM business b
+  LEFT OUTER JOIN (
+    SELECT business_id, COUNT(*) AS photo_cnt
+    FROM photo
+    GROUP BY business_id
+  ) p ON b.id = p.business_id
+  LEFT OUTER JOIN (
+    SELECT business_id, COUNT(*) AS category_cnt
+    FROM category
+    GROUP BY business_id
+  ) c ON b.id = c.business_id -- can use number of categories, can use NLP to extract one dominant category for each business
+  LEFT OUTER JOIN attribute a
+    ON b.id = a.business_id AND a.name = 'Alcohol' -- FOR attribute table, use 'Alcohol' as an example
+  LEFT OUTER JOIN (
+    SELECT 
+      business_id, 
+      COUNT(*) AS review_cnt,
+      SUM(CASE WHEN useful > 0 THEN 1 ELSE 0 END) AS useful_review_cnt,
+      SUM(CASE WHEN funny > 0 THEN 1 ELSE 0 END) AS funny_review_cnt,
+      SUM(CASE WHEN cool > 0 THEN 1 ELSE 0 END) AS cool_review_cnt
+    FROM review
+    GROUP BY business_id
+  ) r ON b.id = r.business_id
+  LEFT OUTER JOIN (
+    SELECT 
+      business_id, 
+      COUNT(*) AS tips_cnt,
+      SUM(CASE WHEN likes > 0 THEN 1 ELSE 0 END) AS liked_tips_cnt
+    FROM tip
+    GROUP BY business_id
+  ) t ON b.id = t.business_id
+ORDER BY b.id
+	
